@@ -7,6 +7,7 @@ import re
 
 my_username = "hydenjkyl"
 L = instaloader.Instaloader()
+LLLL = instaloader.Instaloader()
 L.load_session_from_file(my_username, "instaloader.session")
 # Initialization
 if 'instaloader_session' not in st.session_state:
@@ -14,9 +15,7 @@ if 'instaloader_session' not in st.session_state:
 
 def download_all_posts(username):
     try:
-        instaloader_session = st.session_state["instaloader_session"]
-        instaloader_session.load_session_from_file(my_username, "instaloader.session")  # Reload session
-        profile = instaloader.Profile.from_username(instaloader_session.context, username)
+        profile = instaloader.Profile.from_username(LLLL.context, username)
         image_urls = [post.url for post in profile.get_posts()]
         print(f"All posts from {username} URLs obtained successfully.")
         return image_urls
@@ -56,9 +55,7 @@ def download_post(post_link):
     if match:
         mediaid = match.group(1)
         try:
-            instaloader_session = st.session_state["instaloader_session"]
-            instaloader_session.load_session_from_file(my_username, "instaloader.session")  # Reload session
-            post = instaloader.Post.from_shortcode(instaloader_session.context, mediaid)
+            post = instaloader.Post.from_shortcode(LLLL.context, mediaid)
             full_image_url = post.graph_target.shortcode_media.image_versions2.candidates[0].url
             image_urls = [post.url]
             print(image_urls)
@@ -79,9 +76,7 @@ def download_all_post_slides(post_link, quality="low"):
     if match:
         mediaid = match.group(1)
         try:
-            instaloader_session = st.session_state["instaloader_session"]
-            instaloader_session.load_session_from_file(my_username, "instaloader.session")  # Reload session
-            post = instaloader.Post.from_shortcode(instaloader_session.context, mediaid)
+            post = instaloader.Post.from_shortcode(LLLL.context, mediaid)
             pictures = [node.display_url + f"?quality={quality}" for node in post.get_sidecar_nodes()]
             print(f"All slides from {post.owner_username} URL obtained successfully.")
             return pictures, post.caption
