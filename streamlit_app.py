@@ -50,14 +50,10 @@ def run_app():
                     st.text(result[1])
                 else:
                     for url in result:
-                        if download_type == "Story" and username:
-                            if url["is_video"] == True:
-                                st.video(url["url"])
-                            else:
-                                image = Image.open(BytesIO(requests.get(url["url"]).content))
-                                st.image(image, use_column_width=True)
+                        if url["is_video"] == True:
+                            st.video(url["url"])
                         else:
-                            image = Image.open(BytesIO(requests.get(url).content))
+                            image = Image.open(BytesIO(requests.get(url["url"]).content))
                             st.image(image, use_column_width=True)
                 st.success("Download successful!")
             else:
