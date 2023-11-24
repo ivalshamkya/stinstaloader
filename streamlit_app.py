@@ -40,9 +40,10 @@ def run_app():
                 with st.spinner("Downloading..."):
                     result = download_all_post_slides(link)
 
-        except instaloader.exceptions.QueryReturnedNotFoundException:
+        except instaloader.exceptions.QueryReturnedNotFoundException as e:
             # Handle the case where the session is not valid
             retry_login = True
+            print(e)
 
         if retry_login:
             st.warning("Session expired. Logging in again...")
