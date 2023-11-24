@@ -7,6 +7,15 @@ import requests
 def run_app():
     st.title("Instagram Downloader")
 
+    hide_st_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    # header {visibility: hidden;}
+    </style>
+    """
+    st.markdown(hide_st_style, unsafe_allow_html=True)
+
     # Menu for selecting download type
     download_type = st.sidebar.selectbox("Select Download Type", ["Post Slides", "Story", "All Posts"])
 
