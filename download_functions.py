@@ -6,17 +6,11 @@ import re
 
 my_username = "hydenjkyl"
 L = instaloader.Instaloader()
-
-try:
-    L.load_session_from_file(my_username, "instaloader.session")
-except instaloader.exceptions.QueryReturnedNotFoundException:
-    # Session file not found or invalid, login with a new session
-    L.context.log("Session file not found or invalid. Logging in with a new session.")
-    L.context = instaloader.context.Context()
-    L.interactive_login(my_username)
+L.load_session_from_file(my_username, "instaloader.session")
 
 def download_all_posts(username):
     try:
+        L.load_session_from_file(my_username, "instaloader.session")
         profile = instaloader.Profile.from_username(L.context, username)
         image_urls = [post.url for post in profile.get_posts()]
         print(f"All posts from {username} URLs obtained successfully.")
@@ -30,6 +24,7 @@ def download_all_posts(username):
 
 def download_story(username):
     try:
+        L.load_session_from_file(my_username, "instaloader.session")
         profile = instaloader.Profile.from_username(L.context, username)
         stories = L.get_stories([profile.userid])
         story_links = []
@@ -55,6 +50,7 @@ def download_post(post_link):
     if match:
         mediaid = match.group(1)
         try:
+            L.load_session_from_file(my_username, "instaloader.session")
             post = instaloader.Post.from_shortcode(L.context, mediaid)
             full_image_url = post.graph_target.shortcode_media.image_versions2.candidates[0].url
             image_urls = [post.url]
@@ -76,6 +72,7 @@ def download_all_post_slides(post_link, quality="low"):
     if match:
         mediaid = match.group(1)
         try:
+            L.load_session_from_file(my_username, "instaloader.session")
             post = instaloader.Post.from_shortcode(L.context, mediaid)
             pictures = [node.display_url + f"?quality={quality}" for node in post.get_sidecar_nodes()]
             print(f"All slides from {post.owner_username} URL obtained successfully.")
