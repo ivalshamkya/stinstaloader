@@ -1,4 +1,4 @@
-instaloader==4.9.5
-streamlit==1.15.0
-Pillow==8.4.0
-requests==2.26.0
+instaloader==4.10.1
+streamlit==1.27.2
+Pillow==10.0.1
+requests==2.31.0
