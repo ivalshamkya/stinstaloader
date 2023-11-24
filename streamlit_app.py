@@ -1,6 +1,5 @@
 import streamlit as st
-import instaloader
-from download_functions import download_all_posts, download_story, download_all_post_slides, login
+from download_functions import download_all_posts, download_story, download_all_post_slides
 from PIL import Image
 from io import BytesIO
 import requests
@@ -28,27 +27,15 @@ def run_app():
 
     if st.button("Download"):
         result = None
-        retry_login = False
-        try:
-            if download_type == "All Posts" and username:
-                with st.spinner("Downloading..."):
-                    result = download_all_posts(username)
-            elif download_type == "Story" and username:
-                with st.spinner("Downloading..."):
-                    result = download_story(username)
-            elif download_type == "Post Slides" and link.startswith("https://www.instagram.com/"):
-                with st.spinner("Downloading..."):
-                    result = download_all_post_slides(link)
-
-        except instaloader.exceptions.QueryReturnedNotFoundException as e:
-            # Handle the case where the session is not valid
-            retry_login = True
-            print(e)
-
-        if retry_login:
-            st.warning("Session expired. Logging in again...")
-            login()
-            # Retry the download after logging in again
+        if download_type == "All Posts" and username:
+            with st.spinner("Downloading..."):
+                result = download_all_posts(username)
+        elif download_type == "Story" and username:
+            with st.spinner("Downloading..."):
+                result = download_story(username)
+        elif download_type == "Post Slides" and link.startswith("https://www.instagram.com/"):
+            with st.spinner("Downloading..."):
+                result = download_all_post_slides(link)
 
         if result is not None:
             if len(result) == 2:
