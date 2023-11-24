@@ -6,7 +6,13 @@ import re
 
 my_username = "hydenjkyl"
 L = instaloader.Instaloader()
-L.load_session_from_file(my_username, "instaloader.session")
+
+def login():
+    try:
+        L.load_session_from_file(my_username, "instaloader.session")
+    except instaloader.exceptions.NoProfileException:
+        print(f"Session file not found. Logging in...")
+        L.context.log_in(my_username, "<your_password>")
 
 def download_all_posts(username):
     try:
