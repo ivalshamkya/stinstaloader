@@ -8,10 +8,9 @@ import re
 my_username = "hydenjkyl"
 L = instaloader.Instaloader()
 LLLL = instaloader.Instaloader()
+L.context.log("Login...")
 L.load_session_from_file(my_username, "instaloader.session")
 # Initialization
-if 'instaloader_session' not in st.session_state:
-    st.session_state["instaloader_session"] = L
 
 def download_all_posts(username):
     try:
@@ -28,9 +27,7 @@ def download_all_posts(username):
 
 def download_story(username):
     try:
-        instaloader_session = st.session_state["instaloader_session"]
-        instaloader_session.load_session_from_file(my_username, "instaloader.session")  # Reload session
-        profile = instaloader.Profile.from_username(instaloader_session.context, username)
+        profile = instaloader.Profile.from_username(L.context, username)
         stories = L.get_stories([profile.userid])
         story_links = []
         for story in stories:
