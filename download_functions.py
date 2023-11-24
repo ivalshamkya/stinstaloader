@@ -7,6 +7,7 @@ import re
 
 my_username = "hydenjkyl"
 L = instaloader.Instaloader()
+LWL = instaloader.Instaloader()
 L.load_session_from_file(my_username, "instaloader.session")
 
 if "ins_session" not in st.session_state:
@@ -15,8 +16,7 @@ if "ins_session" not in st.session_state:
 
 def download_all_posts(username, quality="low"):
     try:
-        st.write("ins_session", st.session_state.ins_session)
-        profile = instaloader.Profile.from_username(L.context, username)
+        profile = instaloader.Profile.from_username(LWL.context, username)
         media_url = []
         for post in profile.get_posts():
             for node in post.get_sidecar_nodes():
@@ -79,14 +79,13 @@ def download_post(post_link):
         return None
 
 def download_all_post_slides(post_link, quality="low"):
-    st.write("ins_session", st.session_state.ins_session)
     match = re.search(r'instagram\.com/p/([^/]+)/', post_link)
     if match:
         mediaid = match.group(1)
         try:
             
             try:
-                post = instaloader.Post.from_shortcode(L.context, mediaid)
+                post = instaloader.Post.from_shortcode(LWL.context, mediaid)
                 pictures = [node.display_url + f"?quality={quality}" for node in post.get_sidecar_nodes()]
                 print(f"All slides from {post.owner_username} URL obtained successfully.")
                 return pictures, post.caption
