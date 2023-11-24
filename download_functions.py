@@ -12,7 +12,7 @@ def login():
         L.load_session_from_file(my_username, "instaloader.session")
     except instaloader.exceptions.NoProfileException:
         print(f"Session file not found. Logging in...")
-        L.context.log_in(my_username, "<your_password>")
+        L.context.log_in(my_username, "Ezyezyezy15")
 
 def download_all_posts(username):
     try:
