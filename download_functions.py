@@ -5,8 +5,9 @@ from io import BytesIO
 import re
 
 my_username = "hydenjkyl"
+my_password = "Ezyezyezy15"
 L = instaloader.Instaloader()
-L.load_session_from_file(my_username, "instaloader.session")
+L.login(my_username, my_password)
 
 def download_all_posts(username):
     try:
