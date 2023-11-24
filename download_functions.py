@@ -75,16 +75,19 @@ def download_all_post_slides(post_link, quality="low"):
         mediaid = match.group(1)
         try:
             loader = instaloader.Instaloader()
-            post = instaloader.Post.from_shortcode(loader.context, mediaid)
-            pictures = [node.display_url + f"?quality={quality}" for node in post.get_sidecar_nodes()]
-            print(f"All slides from {post.owner_username} URL obtained successfully.")
-            return pictures, post.caption
-        except instaloader.exceptions.InstaloaderException:
-            print("Invalid post link or post not found.")
-            return None
-        except Exception as e:
-            print(f"An error occurred: {str(e)}")
-            return None
+            try:
+                post = instaloader.Post.from_shortcode(loader.context, mediaid)
+                pictures = [node.display_url + f"?quality={quality}" for node in post.get_sidecar_nodes()]
+                print(f"All slides from {post.owner_username} URL obtained successfully.")
+                return pictures, post.caption
+            except instaloader.exceptions.InstaloaderException:
+                print("Invalid post link or post not found.")
+                return None
+            except Exception as e:
+                print(f"An error occurred: {str(e)}")
+                return None
+        except instaloader.exceptions.QueryReturnedForbiddenException as e:
+            st.error(e)
     else:
         print("Invalid Instagram post link format.")
         return None
