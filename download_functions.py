@@ -82,9 +82,15 @@ def download_all_post_slides(post_link, quality="low"):
         mediaid = match.group(1)
         try:
             post = instaloader.Post.from_shortcode(L.context, mediaid)
-            pictures = [node.display_url + f"?quality={quality}" for node in post.get_sidecar_nodes()]
+            media_url = []
+            for node in post.get_sidecar_nodes():
+                url = {
+                    "url": node.video_url if node.video_url is not None else node.display_url,
+                    "is_video": node.is_video
+                }
+                media_url.append(url)
             print(f"All slides from {post.owner_username} URL obtained successfully.")
-            return pictures, post.caption
+            return media_url, post.caption
         except instaloader.exceptions.InstaloaderException:
             print("Invalid post link or post not found.")
             return None

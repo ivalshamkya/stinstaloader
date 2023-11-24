@@ -85,6 +85,33 @@ def download_all_post_slides(post_link, quality="low"):
                     "is_video": node.is_video
                 }
                 media_url.append(url)
+
+            if len(media_url) < 1:
+                url = {
+                    "url": post.video_url if post.video_url is not None else post.url,
+                    "is_video": post.is_video
+                }
+                media_url.append(url)
+            print(media_url)
+            print(f"All slides from {post.owner_username} URL obtained successfully.")
+            return media_url, post.caption
+        except instaloader.exceptions.InstaloaderException:
+            print("Invalid post link or post not found.")
+            return None
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return None
+    else:
+        print("Invalid Instagram post link format.")
+        return None
+    
+def download_reels(post_link):
+    match = re.search(r'instagram\.com/reel/([^/]+)/', post_link)
+    if match:
+        mediaid = match.group(1)
+        try:
+            post = instaloader.Post.from_shortcode(L.context, mediaid)
+            media_url = [{"url": post.video_url, "is_video": True}]
             print(f"All slides from {post.owner_username} URL obtained successfully.")
             return media_url, post.caption
         except instaloader.exceptions.InstaloaderException:

@@ -20,7 +20,7 @@ def run_app():
     st.markdown(hide_st_style, unsafe_allow_html=True)
 
     # Menu for selecting download type
-    download_type = st.sidebar.selectbox("Select Download Type", ["Post Slides", "Story", "All Posts"])
+    download_type = st.sidebar.selectbox("Select Download Type", ["Post Slides", "Story", "Reels", "All Posts"])
 
     # Input field for Instagram link or username
     if download_type in ["All Posts", "Story"]:
@@ -42,6 +42,11 @@ def run_app():
                 endpoint = "/download_story"
                 params = {"username": username}
                 result = requests.get(f"{base_url}{endpoint}", params=params).json()
+            
+            elif download_type == "Reels" and link.startswith("https://www.instagram.com/"):
+                endpoint = "/download_reels"
+                params = {"post_link": link}
+                result = requests.get(f"{base_url}{endpoint}", params=params).json()
 
             elif download_type == "Post Slides" and link.startswith("https://www.instagram.com/"):
                 endpoint = "/download_all_post_slides"
@@ -51,17 +56,19 @@ def run_app():
             if result is not None:
                 if len(result) == 2:
                     for url in result[0]:
-                        if download_type == "Story" and username:
+                        print("aa")
+                        if url["is_video"]:
                             st.video(BytesIO(requests.get(url["url"]).content))
                         else:
-                            print(url)
                             image = Image.open(BytesIO(requests.get(url["url"]).content))
                             st.image(image, use_column_width=True)
                     st.text(result[1])
                 else:
+                    print(result)
                     for url in result:
+                        print(url)
                         if url["is_video"]:
-                            st.video(url["url"])
+                            st.video(BytesIO(requests.get(url["url"]).content))
                         else:
                             image = Image.open(BytesIO(requests.get(url["url"]).content))
                             st.image(image, use_column_width=True)

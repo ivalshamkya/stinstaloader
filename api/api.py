@@ -3,7 +3,7 @@ import instaloader
 from PIL import Image
 from io import BytesIO
 import re
-from repository import download_all_post_slides, download_all_posts, download_story, download_post
+from repository import download_all_post_slides, download_all_posts, download_story, download_post, download_reels
 
 app = Flask(__name__)
 L = instaloader.Instaloader()
@@ -40,6 +40,15 @@ def download_all_post_slides_api():
     post_link = request.args.get('post_link')
     if post_link:
         result = download_all_post_slides(post_link)
+        if result:
+            return jsonify(result)
+    return jsonify({"error": "Invalid request or post link not provided"})
+
+@app.route('/download_reels', methods=['GET'])
+def download_reels_api():
+    post_link = request.args.get('post_link')
+    if post_link:
+        result = download_reels(post_link)
         if result:
             return jsonify(result)
     return jsonify({"error": "Invalid request or post link not provided"})
