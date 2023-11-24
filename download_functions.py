@@ -5,9 +5,15 @@ from io import BytesIO
 import re
 
 my_username = "hydenjkyl"
-my_password = "Ezyezyezy15"
 L = instaloader.Instaloader()
-L.login(my_username, my_password)
+
+try:
+    L.load_session_from_file(my_username, "instaloader.session")
+except instaloader.exceptions.QueryReturnedNotFoundException:
+    # Session file not found or invalid, login with a new session
+    L.context.log("Session file not found or invalid. Logging in with a new session.")
+    L.context = instaloader.context.Context()
+    L.interactive_login(my_username)
 
 def download_all_posts(username):
     try:
