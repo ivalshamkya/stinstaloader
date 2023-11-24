@@ -79,7 +79,7 @@ def download_post(post_link):
         return None
 
 def download_all_post_slides(post_link, quality="low"):
-    st.write("ins_session", st.session_state.ins_session.profile)
+    st.write("ins_session", st.session_state.ins_session)
     match = re.search(r'instagram\.com/p/([^/]+)/', post_link)
     if match:
         mediaid = match.group(1)
