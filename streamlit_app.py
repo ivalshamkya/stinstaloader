@@ -20,7 +20,7 @@ def run_app():
     st.markdown(hide_st_style, unsafe_allow_html=True)
 
     # Menu for selecting download type
-    download_type = st.sidebar.selectbox("Select Download Type", ["Post Slides", "Story", "Reels", "All Posts"])
+    download_type = st.sidebar.selectbox("Select Download Type", ["Post & Reels", "Story", "All Posts"])
 
     # Input field for Instagram link or username
     if download_type in ["All Posts", "Story"]:
@@ -38,19 +38,19 @@ def run_app():
                 params = {"username": username}
                 result = requests.get(f"{base_url}{endpoint}", params=params).json()
 
-            elif download_type == "Story" and username:
+            elif download_type in "Story" and username:
                 endpoint = "/download_story"
                 params = {"username": username}
                 result = requests.get(f"{base_url}{endpoint}", params=params).json()
-            
-            elif download_type == "Reels" and link.startswith("https://www.instagram.com/"):
-                endpoint = "/download_reels"
-                params = {"post_link": link}
-                result = requests.get(f"{base_url}{endpoint}", params=params).json()
 
-            elif download_type == "Post Slides" and link.startswith("https://www.instagram.com/"):
-                endpoint = "/download_all_post_slides"
-                params = {"post_link": link}
+            elif download_type == "Post & Reels" and link.startswith("https://www.instagram.com/"):
+                if link.startswith("https://www.instagram.com/reel/"):
+                    endpoint = "/download_reels"
+                    params = {"post_link": link}
+                elif link.startswith("https://www.instagram.com/p/"):
+                    endpoint = "/download_all_post_slides"
+                    params = {"post_link": link}
+                    
                 result = requests.get(f"{base_url}{endpoint}", params=params).json()
 
             if result is not None:
