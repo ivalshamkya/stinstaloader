@@ -68,36 +68,56 @@ def run_app():
                     params = {"post_link": link}
                     
                 result = requests.get(f"{base_url}{endpoint}", params=params).json()
-
             if result is not None:
                 dividerEl.divider()
                 total_progress = 100
-                increment = total_progress // len(result)
                 current_progress = 0
                 if len(result) == 2:
-                    for url in result[0]:
-                        if url["is_video"]:
-                            st.video(BytesIO(requests.get(url["url"]).content))
-                        else:
-                            image = Image.open(BytesIO(requests.get(url["url"]).content))
-                            st.image(image, use_column_width=True)
-                        current_progress += increment
-                        progress_bar.progress(current_progress, text=f"Please wait({current_progress}%)...")
-                    st.text(result[1])
+                    increment = total_progress // len(result[0])
+                    images = result[0]
+
+                    for i in range(0, len(images), 4):
+                        col1, col2, col3, col4 = st.columns(4)
+
+                        for j in range(min(4, len(images) - i)):
+                            url = images[i + j]
+
+                            with col1 if j == 0 else col2 if j == 1 else col3 if j == 2 else col4:
+                                if url["is_video"]:
+                                    st.video(BytesIO(requests.get(url["url"]).content))
+                                else:
+                                    image = Image.open(BytesIO(requests.get(url["url"]).content))
+                                    st.image(image, use_column_width=True)
+                                current_progress += increment
+                                progress_bar.progress(current_progress, text=f"Please wait({current_progress}%)...")
+                    if result[1] != "":
+                        with st.container():
+                            st.subheader("Caption:")
+                            st.caption(result[1])
                 else:
-                    for url in result:
-                        if url["is_video"]:
-                            st.video(BytesIO(requests.get(url["url"]).content))
-                        else:
-                            image = Image.open(BytesIO(requests.get(url["url"]).content))
-                            st.image(image, use_column_width=True)
+                    increment = total_progress // len(result)
+                    increment = increment if increment > 0 else 1
+                    images = result
+
+                    for i in range(0, len(images), 4):
+                        col1, col2, col3, col4 = st.columns(4)
+
+                        for j in range(min(4, len(images) - i)):
+                            url = images[i + j]
+
+                            with col1 if j == 0 else col2 if j == 1 else col3 if j == 2 else col4:
+                                if url["is_video"]:
+                                    st.video(BytesIO(requests.get(url["url"]).content))
+                                else:
+                                    image = Image.open(BytesIO(requests.get(url["url"]).content))
+                                    st.image(image, use_column_width=True)
                         current_progress += increment
                         progress_bar.progress(current_progress, text=f"Please wait({current_progress}%)...")
                 progress_bar.progress(100, text=f"Finished({100}%).")
-                st.success("Download successful!")
+                st.toast("Download successful 🎉", icon="✅")
+                st.balloons()
             else:
                 progress_bar.progress(0, text="error occurred while downloading")
                 st.error("Download failed. Please check the link or username.")
         except requests.exceptions.RequestException as e:
             st.error(f"Request error: {e}")
-

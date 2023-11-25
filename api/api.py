@@ -39,6 +39,7 @@ def download_post_api():
 def download_all_post_slides_api():
     post_link = request.args.get('post_link')
     if post_link:
+        print(post_link)
         result = download_all_post_slides(post_link)
         if result:
             return jsonify(result)
