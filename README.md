@@ -1,6 +1,10 @@
-## StInstaloader
+# StInstaloader
 
 StInstaloader is a tool designed to download Instagram posts, including photos and videos. It provides the flexibility to download content from a specific Instagram URL or to download all posts from a given username.
+
+---
+
+![1291hf1fh913hg91h31q9q189yvnjwnw](https://github.com/ivalshamkya/stinstaloader/assets/85030029/663d224b-3cc4-49ab-8879-715dd7a6ffb1)
 
 ## Features
 
