@@ -1,5 +1,5 @@
 instaloader==4.10.1
 streamlit==1.27.2
-Pillow==10.0.1
+Pillow==10.2.0
 requests==2.31.0
 python-dotenv==1.0.0
